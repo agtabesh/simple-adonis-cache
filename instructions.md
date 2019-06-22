@@ -1,7 +1,10 @@
 ## Register provider
 Register provider inside `start/app.js` file.
 
-```js
+```javascript
+// start/app.js
 const providers = [
-  'simple-adonis-cache/providers/CacheProvider'
+  ...,
+  'adonis-cache/providers/CacheProvider'
 ]
+```
