@@ -1,5 +1,5 @@
 # Simple Adonis Cache
-[![npm (scoped)](https://img.shields.io/badge/npm-v0.2.0-blue.svg)](https://www.npmjs.com/package/@agtabesh/keyword-extractor)
+[![npm (scoped)](https://img.shields.io/badge/npm-v0.3.1-blue.svg)](https://www.npmjs.com/package/simple-adonis-cache)
 
 A simple cache mechanism for AdonisJs.
 
