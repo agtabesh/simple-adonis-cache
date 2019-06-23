@@ -9,8 +9,6 @@ const GE = use('@adonisjs/generic-exceptions')
  * file that was distributed with this source code.
 */
 
-const values = new Map()
-
 /**
  * Memory driver to store cache values to the Memory
  *
@@ -35,7 +33,8 @@ const values = new Map()
    * @param {Config} Config
    */
   constructor (Config) {
-    this.config = Config.get('cache')
+    this.Config = Config.get('cache')
+    this._values = new Map()
   }
 
   /**
@@ -48,7 +47,7 @@ const values = new Map()
    * @return {Mixed}
    */
   async remember (key, expire, value) {
-    if (!this.config.enabled) return getFinalValue(value)
+    if (!this.Config.enabled) return this._getFinalValue(value)
     if (!key) {
       throw GE
         .InvalidArgumentException
@@ -64,9 +63,9 @@ const values = new Map()
         .InvalidArgumentException
         .invoke(`${value} is not a valid value`, 500, 'E_INVALID_VALUE')
     }
-    return keyExists(`${this.config.prefix}${key}`)
-      ? getKey(`${this.config.prefix}${key}`)
-      : setKey(`${this.config.prefix}${key}`, getFinalValue(value), expire)
+    return this._keyExists(`${this.Config.prefix}${key}`)
+      ? this._getKey(`${this.Config.prefix}${key}`)
+      : this._setKey(`${this.Config.prefix}${key}`, this._getFinalValue(value), expire)
   }
 
   /**
@@ -78,7 +77,7 @@ const values = new Map()
    * @return {Mixed}
    */
   async forever (key, value) {
-    if (!this.config.enabled) return getFinalValue(value)
+    if (!this.Config.enabled) return this._getFinalValue(value)
     if (!key) {
       throw GE
         .InvalidArgumentException
@@ -89,9 +88,9 @@ const values = new Map()
         .InvalidArgumentException
         .invoke(`${value} is not a valid value`, 500, 'E_INVALID_VALUE')
     }
-    return keyExists(`${this.config.prefix}${key}`)
-      ? getKey(`${this.config.prefix}${key}`)
-      : setKey(`${this.config.prefix}${key}`, getFinalValue(value))
+    return this._keyExists(`${this.Config.prefix}${key}`)
+      ? this._getKey(`${this.Config.prefix}${key}`)
+      : this._setKey(`${this.Config.prefix}${key}`, this._getFinalValue(value))
   }
 
   /**
@@ -108,58 +107,75 @@ const values = new Map()
         .InvalidArgumentException
         .invoke(`${key} is not a valid key`, 500, 'E_INVALID_KEY')
     }
-    deleteKey(`${this.config.prefix}${key}`)
+    this._deleteKey(`${this.Config.prefix}${key}`)
+  }
+
+  /**
+   * Check for existence of the key
+   * @method keyExists
+   *
+   * @param {String} key
+   *
+   * @return {Boolean}
+   */
+  _keyExists (key) {
+    return this._values.has(key)
+  }
+
+  /**
+   * Get value of a specific key
+   * @method keyExists
+   *
+   * @param {String} key
+   *
+   * @return {Mixed}
+   */
+  _getKey (key) {
+    return this._values.get(key)
+  }
+
+  /**
+   * @method setKey
+   *
+   * @param {String} key
+   * @param {Function} func
+   * @param {Number} expire
+   *
+   * @return {Mixed}
+   */
+  _setKey (key, value, expire) {
+    this._values.set(key, value)
+    if (typeof expire === 'number') {
+      setTimeout(() => {
+        this._deleteKey(key)
+      }, expire * 1000)
+    }
+    return value
+  }
+
+  /**
+   * @method getFinalValue
+   *
+   * @param {Mixed} value
+   *
+   * @return {Mixed}
+   */
+  async _getFinalValue (value) {
+    return typeof value === 'function'
+      ? await value()
+      : value
+  }
+
+  /**
+   * @method deleteKey
+   *
+   * @param {String} key
+   *
+   * @return {Boolean}
+   */
+  _deleteKey (key) {
+    return this._values.delete(key)
   }
 }
-
-/**
- * Check for existence of the key
- * @param {String} key
- */
-const keyExists = key => values.has(key)
-
-/**
- * Get value of a specific key
- * @param {String} key
- */
-const getKey = key => values.get(key)
-
-/**
- * @method setKey
- *
- * @param {String} key
- * @param {Function} func
- * @param {Number} expire
- *
- * @return {Mixed}
- */
-const setKey = async (key, value, expire) => {
-  values.set(key, value)
-  if (typeof expire === 'number') {
-    setTimeout(() => {
-      deleteKey(key)
-    }, expire * 1000)
-  }
-  return value
-}
-
-/**
- * @method getFinalValue
- *
- * @param {Mixed} value
- *
- * @return {Mixed}
- */
-const getFinalValue = async value => {
-  return typeof value === 'function'
-    ? await value()
-    : value
-}
-
-/**
- *
- * @param {String} key
- */
-const deleteKey = key => values.delete(key)
 
 module.exports = Memory
