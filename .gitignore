@@ -62,4 +62,6 @@ typings/
 
 package-lock.json
 .DS_Store
-*.DS_Store
+._.DS_Store
+**/.DS_Store
+**/._.DS_Store
