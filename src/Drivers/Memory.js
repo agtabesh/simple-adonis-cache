@@ -36,7 +36,6 @@ const values = new Map()
    */
   constructor (Config) {
     this.config = Config.get('cache')
-    this._values = new Map()
   }
 
   /**
