@@ -1,5 +1,5 @@
 # Simple Adonis Cache
-[![npm (scoped)](https://img.shields.io/badge/npm-v0.3.1-blue.svg)](https://www.npmjs.com/package/simple-adonis-cache)
+[![npm (scoped)](https://img.shields.io/badge/npm-v0.4.0-blue.svg)](https://www.npmjs.com/package/simple-adonis-cache)
 
 A simple cache mechanism for AdonisJs.
 
@@ -142,7 +142,7 @@ class UserController {
 
 - [x] Add basic functionality
 - [x] Add memory driver
-- [ ] Add redis driver
+- [x] Add redis driver
 - [ ] Add a method to flush all cached values
 - [ ] Add a command to flush all cached values
 - [ ] Support for different environments
@@ -151,8 +151,8 @@ class UserController {
 <a name="release-history"></a>
 
 - 0.1.0 - First draft.
-- 0.2.0 - Initial release and basic functionality and supports for memory storage.
-
+- 0.3.0 - Initial release and basic functionality and supports for memory storage.
+- 0.4.0 - Add support for Redis driver
 
 ## Contributing
 <a name="contributing"></a>

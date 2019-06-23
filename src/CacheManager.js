@@ -13,8 +13,6 @@ const { ioc } = use('@adonisjs/fold')
 const GE = use('@adonisjs/generic-exceptions')
 const drivers = require('./Drivers')
 
-
-
 /**
  * The session manager class is exposed as IoC container
  * binding, which can be used to add new driver and
@@ -58,6 +56,7 @@ class CacheManager {
   makeDriverInstance (name) {
     const driver = drivers[name] || this._drivers[name]
     if (!driver) {
+      console.log(drivers)
       throw GE
         .InvalidArgumentException
         .invoke(`${name} is not a valid cache provider`, 500, 'E_INVALID_CACHE_DRIVER')

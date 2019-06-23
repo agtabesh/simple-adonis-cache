@@ -10,5 +10,6 @@
 */
 
 module.exports = {
-  memory: require('./Memory')
+  memory: require('./Memory'),
+  redis: require('./Redis')
 }

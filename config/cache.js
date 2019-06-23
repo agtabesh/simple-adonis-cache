@@ -17,7 +17,7 @@ module.exports = {
   |--------------------------------------------------------------------------
   |
   | Indicates where objects should reside on
-  | acceptable values: 'memory'
+  | acceptable values: 'memory', 'redis'
   |
   */
   driver: 'memory',
