@@ -56,7 +56,6 @@ class CacheManager {
   makeDriverInstance (name) {
     const driver = drivers[name] || this._drivers[name]
     if (!driver) {
-      console.log(drivers)
       throw GE
         .InvalidArgumentException
         .invoke(`${name} is not a valid cache provider`, 500, 'E_INVALID_CACHE_DRIVER')
